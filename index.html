@@ -1,0 +1,513 @@
+<!doctype html>
+<html lang="bg">
+<head>
+<meta name="robots" content="noindex,nofollow">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>AI продаващ агент за онлайн магазини | HighSky</title>
+<meta name="description" content="Агентът на HighSky разпитва клиента и му показва няколко предложения за неговия случай. В магазин за техника носи 1,96 евро на съобщение за 4 месеца.">
+<meta name="theme-color" content="#FFFFFF">
+<link rel="icon" type="image/png" href="assets/img/mark.png">
+<script>document.documentElement.classList.add('js');if(/[?&]static=1/.test(location.search))document.documentElement.classList.add('static');
+/* предварително зареждане на шрифта само през сървър: при отваряне на файла браузърът го отказва */
+if(/^https?:/.test(location.protocol)){var l=document.createElement('link');l.rel='preload';l.as='font';l.type='font/woff2';l.href='assets/fonts/Onest.woff2';l.crossOrigin='anonymous';document.head.appendChild(l);}</script>
+<link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+
+<!-- Пиктограмите: един стил, една дебелина на линията -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+  <symbol id="i-moon" viewBox="0 0 24 24"><path d="M19.5 14.6A7.6 7.6 0 0 1 9.4 4.5a7.9 7.9 0 1 0 10.1 10.1z"/></symbol>
+  <symbol id="i-plug" viewBox="0 0 24 24"><path d="M9 3v4.5M15 3v4.5M6.5 7.5h11V11a5.5 5.5 0 0 1-11 0V7.5zM12 16.5V21"/></symbol>
+  <symbol id="i-scale" viewBox="0 0 24 24"><path d="M12 4v16M7 20h10M5 7h14M5 7l-2.5 6a2.5 2.5 0 0 0 5 0L5 7zM19 7l-2.5 6a2.5 2.5 0 0 0 5 0L19 7z"/></symbol>
+  <symbol id="i-return" viewBox="0 0 24 24"><circle cx="9" cy="8" r="3.5"/><path d="M2.5 20a6.5 6.5 0 0 1 10.5-5.1M15 17.5a3.5 3.5 0 1 0 1.2-2.6M15.6 12.6v2.4H18"/></symbol>
+  <symbol id="i-bagcheck" viewBox="0 0 24 24"><path d="M5 8h14l-1 12.5H6L5 8zM9 8V6.5a3 3 0 0 1 6 0V8M9.2 14.2l2 2 3.6-3.6"/></symbol>
+  <symbol id="i-bag" viewBox="0 0 24 24"><path d="M5 8h14l-1 12.5H6L5 8zM9 8V6.5a3 3 0 0 1 6 0V8"/></symbol>
+  <symbol id="i-browser" viewBox="0 0 24 24"><rect x="3" y="4.5" width="18" height="15" rx="3"/><path d="M3 9h18M6.5 6.8h.01M9 6.8h.01"/></symbol>
+  <symbol id="i-camera" viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="16" rx="5"/><circle cx="12" cy="12" r="3.6"/><path d="M16.6 7.4h.01"/></symbol>
+  <symbol id="i-bubble" viewBox="0 0 24 24"><path d="M12 4a8 7.5 0 0 0-6.9 11.3L4 20l4.4-1.5A8 7.5 0 1 0 12 4z"/><path d="M8 13l2.6-2.6 2.4 1.8L16 9"/></symbol>
+  <symbol id="i-phone" viewBox="0 0 24 24"><path d="M6 3.5h2.6l1.8 4.6-2.3 1.4a11 11 0 0 0 6.4 6.4l1.4-2.3 4.6 1.8V18a2.5 2.5 0 0 1-2.6 2.5C10.2 20 4 13.8 3.5 6.1A2.5 2.5 0 0 1 6 3.5z"/></symbol>
+  <symbol id="i-tv" viewBox="0 0 24 24"><rect x="2.5" y="4.5" width="19" height="12.5" rx="2"/><path d="M8 20.5h8M12 17v3.5"/></symbol>
+  <symbol id="i-cable" viewBox="0 0 24 24"><path d="M4 7h4v4H4zM16 13h4v4h-4zM6 11v2.5a4 4 0 0 0 4 4h1a3 3 0 0 0 3-3v-5a3 3 0 0 1 3-3h1v6M5 7V4.5M7 7V4.5M17 17v2.5M19 17v2.5"/></symbol>
+  <symbol id="i-report" viewBox="0 0 24 24"><rect x="4.5" y="3" width="15" height="18" rx="2.5"/><path d="M8 15.5v-3M12 15.5V9M16 15.5v-5"/></symbol>
+  <symbol id="i-memory" viewBox="0 0 24 24"><circle cx="9" cy="8" r="3.5"/><path d="M2.5 20a6.5 6.5 0 0 1 13 0M16 3.5h4.5v6.5l-2.25-1.6L16 10V3.5z"/></symbol>
+  <symbol id="i-tool" viewBox="0 0 24 24"><path d="M14.5 6.4a4.2 4.2 0 0 0-5.4 5.3L3.8 17a1.6 1.6 0 0 0 0 2.3l.9.9a1.6 1.6 0 0 0 2.3 0l5.3-5.3a4.2 4.2 0 0 0 5.3-5.4l-2.6 2.6-2.3-.5-.5-2.3 2.3-2.9z"/></symbol>
+  <symbol id="i-unlock" viewBox="0 0 24 24"><rect x="5" y="10.5" width="14" height="10" rx="2.5"/><path d="M8.5 10.5V7.2a3.5 3.5 0 0 1 6.6-1.6M12 14.5v2"/></symbol>
+  <symbol id="i-down" viewBox="0 0 24 24"><path d="M12 5v14M6.5 13.5L12 19l5.5-5.5"/></symbol>
+  <symbol id="i-chev-l" viewBox="0 0 24 24"><path d="M14.5 5.5L8 12l6.5 6.5"/></symbol>
+  <symbol id="i-chev-r" viewBox="0 0 24 24"><path d="M9.5 5.5L16 12l-6.5 6.5"/></symbol>
+  <symbol id="i-plus" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></symbol>
+  <symbol id="i-check" viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5"/></symbol>
+  <symbol id="i-checkcircle" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M8 12.4l2.8 2.8L16.2 9.6"/></symbol>
+  <symbol id="i-replay" viewBox="0 0 24 24"><path d="M4.5 12a7.5 7.5 0 1 0 2.2-5.3M4.5 4v3.5H8"/></symbol>
+  <symbol id="i-send" viewBox="0 0 24 24"><path d="M4.5 11.5l15-7-5.5 15-2.6-5.4-6.9-2.6zM11.4 14.1l3.4-3.4"/></symbol>
+  <symbol id="i-trend" viewBox="0 0 24 24"><path d="M3.5 17l5.5-5.5 4 3.5 7.5-8M15 7h5.5v5.5"/></symbol>
+  <symbol id="i-alert" viewBox="0 0 24 24"><path d="M12 3.8l9 15.7H3L12 3.8zM12 10v4M12 16.8v.01"/></symbol>
+  <symbol id="i-card" viewBox="0 0 24 24"><rect x="3" y="5.5" width="18" height="13" rx="2.5"/><path d="M3 10h18M7 14.5h4"/></symbol>
+  <symbol id="i-users" viewBox="0 0 24 24"><circle cx="9" cy="8" r="3.5"/><path d="M2.5 20a6.5 6.5 0 0 1 13 0M15.5 4.6a3.5 3.5 0 0 1 0 6.8M17.5 14.2A6.5 6.5 0 0 1 21.5 20"/></symbol>
+  <symbol id="i-store" viewBox="0 0 24 24"><path d="M4 9.5V20h16V9.5M3 9.5l1.6-5h14.8l1.6 5a3 3 0 0 1-5.7 1.2 3 3 0 0 1-5.6 0A3 3 0 0 1 3 9.5zM10 20v-5h4v5"/></symbol>
+</svg>
+
+<a class="skip" href="#glavno">Към съдържанието</a>
+
+<header class="bar" id="bar">
+  <div class="bar__in">
+    <a class="bar__logo" href="#top" aria-label="HighSky, към началото"><img src="assets/img/logo-highsky.png" alt="HighSky Ai" width="640" height="235"></a>
+    <a class="btn btn--sm js-contact" href="mailto:razgovor@example.com">Хайде да поговорим</a>
+  </div>
+</header>
+
+<main id="glavno">
+
+<!-- 1. ПЪРВИ ЕКРАН -->
+<section class="hero" id="top">
+  <div class="hero__sky" aria-hidden="true">
+    <div class="hero__glow"></div>
+    <div class="horizon"><div class="horizon__rim"></div></div>
+  </div>
+  <div class="wrap hero__grid">
+    <div class="hero__copy">
+      <p class="eyebrow rv">AI продаващ агент за големи онлайн магазини</p>
+      <h1 class="h1 rv" style="--d:1"><span class="h1__a">Чатботовете отговарят.</span> <span class="h1__b">AI агентът продава.</span></h1>
+      <p class="lead rv" style="--d:2">Агентът на HighSky пита клиента какво му трябва, показва му точните предложения за неговия случай и добавя това, което върви към покупката. Всяко съобщение носи €<span data-n="perMsgClaim">1</span>.</p>
+      <div class="hero__cta rv" style="--d:3">
+        <a class="btn btn--lg js-contact" href="mailto:razgovor@example.com" id="heroCta">Хайде да поговорим</a>
+        <a class="proofcard" href="#chisla">
+          <span class="proofcard__n"><span data-n="tech.sales">42&nbsp;115</span>&nbsp;евро</span>
+          <span class="proofcard__t">продажби през агента за <span data-n="tech.months">4</span>&nbsp;месеца в магазин за техника</span>
+          <svg class="ic proofcard__ic" aria-hidden="true"><use href="#i-down"/></svg>
+        </a>
+      </div>
+    </div>
+
+    <div class="hero__demo rv" style="--d:2">
+      <div class="chat" id="chat" aria-label="Пример за разговор с агента в измислен магазин">
+        <div class="chat__head">
+          <span class="chat__avatar" aria-hidden="true"><svg class="ic"><use href="#i-store"/></svg></span>
+          <span class="chat__who">
+            <strong>Консултант на магазина</strong>
+            <span>Примерен магазин за дом и кухня</span>
+          </span>
+        </div>
+        <div class="chat__body" id="chatBody" aria-live="off">
+          <div class="chat__list" id="chatList"></div>
+        </div>
+        <div class="chat__input" aria-hidden="true">
+          <span class="chat__field" id="chatField"><span class="chat__ph">Напишете съобщение</span><span class="chat__typed"></span></span>
+          <span class="chat__send"><svg class="ic"><use href="#i-send"/></svg></span>
+        </div>
+      </div>
+      <div class="cart" id="cart" aria-hidden="true">
+        <span class="cart__ic"><svg class="ic"><use href="#i-bag"/></svg></span>
+        <span class="cart__lbl">Количка</span>
+        <span class="cart__sum"><span class="cart__val" id="cartVal">140</span>&nbsp;евро</span>
+        <span class="cart__plus" id="cartPlus"></span>
+      </div>
+      <div class="chat__foot">
+        <p class="chat__note">Демонстрация с примерни продукти и цени.</p>
+        <button class="btn-ghost" type="button" id="chatReplay"><svg class="ic" aria-hidden="true"><use href="#i-replay"/></svg>Пусни отново</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 2. КАТАЛОГЪТ -->
+<section class="sec" id="katalog">
+  <div class="wrap split">
+    <div class="split__text">
+      <p class="eyebrow rv">Проблемът</p>
+      <h2 class="h2 rv" style="--d:1">Колкото <span class="nw">по-голям</span> е каталогът, толкова <span class="nw">по-трудно</span> се купува от него</h2>
+      <div class="prose rv" style="--d:2">
+        <p>Голям онлайн магазин има от <span data-n="catalogMin">20&nbsp;000</span> до над <span data-n="catalogMax">30&nbsp;000</span> продукта. Средният купувач вижда около <span data-n="seenByBuyer">10</span> от тях. Влиза от телефона, пише „телевизор“ и получава стена от резултати. Пише „подарък за шестгодишно дете“ и търсачката не знае какво да му покаже.</p>
+        <p>Вложили сте в снимки и описания за всеки продукт. До клиента стигат десетина. Останалите той така и не намира, а сред тях може да е онова, което е търсил.</p>
+      </div>
+    </div>
+    <figure class="viz viz--dots panel rv" style="--d:1">
+      <canvas id="dots" aria-hidden="true"></canvas>
+      <figcaption class="legend">
+        <span class="legend__item"><i class="dot dot--mute"></i><span><b><span data-n="catalogMin">20&nbsp;000</span> до <span data-n="catalogMax">30&nbsp;000</span>+</b> продукта в голям каталог</span></span>
+        <span class="legend__item"><i class="dot dot--lit"></i><span><b>около <span data-n="seenByBuyer">10</span></b> вижда средният купувач</span></span>
+      </figcaption>
+    </figure>
+  </div>
+</section>
+
+<!-- 3. ЕДИН РАЗГОВОР -->
+<section class="sec" id="razgovor">
+  <div class="wrap">
+    <div class="head">
+      <p class="eyebrow rv">Как продава агентът</p>
+      <h2 class="h2 rv" style="--d:1">Клиентът пита с думите си. Агентът го води до поръчка.</h2>
+      <p class="lead rv" style="--d:2">Агентът разпитва клиента какво му трябва и вместо стена от резултати му показва точните предложения за неговия случай. Ако нито едно не му хареса, предлага други. Ето как изглежда това в една обикновена седмица на магазина.</p>
+    </div>
+  </div>
+  <div class="railbox rv" style="--d:2">
+    <div class="rail" id="momentsRail" tabindex="0" aria-label="Пет момента от седмицата на магазина">
+      <article class="moment">
+        <span class="moment__ic"><svg class="ic"><use href="#i-moon"/></svg></span>
+        <h3>Петък, 23:30</h3>
+        <p>В количката има <span data-n="scene.cart">140</span>&nbsp;евро, а клиентът пита за продукт, който го няма. Агентът му показва три подобни и казва кой е <span class="nw">по-високо</span> оценен и кой пасва на предпочитанията му. Поръчката остава, с още един продукт в нея.</p>
+      </article>
+      <article class="moment">
+        <span class="moment__ic"><svg class="ic"><use href="#i-plug"/></svg></span>
+        <h3>Съвместимост</h3>
+        <p>„Ще върви ли с моята машина?“ Агентът отговаря веднага, на езика, на който е попитан, и сравнява моделите, които стават.</p>
+      </article>
+      <article class="moment">
+        <span class="moment__ic"><svg class="ic"><use href="#i-scale"/></svg></span>
+        <h3>Колебание</h3>
+        <p>Клиентът се чуди между два модела. Агентът му обяснява разликата с прости думи, а ако и двата не са за него, показва други.</p>
+      </article>
+      <article class="moment">
+        <span class="moment__ic"><svg class="ic"><use href="#i-return"/></svg></span>
+        <h3>Редовен клиент</h3>
+        <p>Агентът помни какво е купувал. Ако пропусне обичайната си поръчка, получава персонален код.</p>
+      </article>
+      <article class="moment">
+        <span class="moment__ic"><svg class="ic"><use href="#i-bagcheck"/></svg></span>
+        <h3>Поръчка в разговора</h3>
+        <p>Поръчката се завършва в разговора, а плащането минава през магазина.</p>
+      </article>
+    </div>
+    <div class="wrap railnav">
+      <div class="railnav__dots" id="momentsDots" aria-hidden="true"></div>
+      <div class="railnav__btns">
+        <button class="rbtn" type="button" data-rail="momentsRail" data-dir="-1" aria-label="Предишен момент"><svg class="ic"><use href="#i-chev-l"/></svg></button>
+        <button class="rbtn" type="button" data-rail="momentsRail" data-dir="1" aria-label="Следващ момент"><svg class="ic"><use href="#i-chev-r"/></svg></button>
+      </div>
+    </div>
+  </div>
+  <div class="wrap channels">
+    <p class="channels__txt rv">Същият агент отговаря в Instagram и в Messenger, когато клиентът пише след реклама. Гласовият агент говори с хората по телефона. Работи 24/7, на всички езици.</p>
+    <ul class="channels__list rv" style="--d:1" aria-label="Канали">
+      <li><svg class="ic" aria-hidden="true"><use href="#i-browser"/></svg>Сайт</li>
+      <li><svg class="ic" aria-hidden="true"><use href="#i-camera"/></svg>Instagram</li>
+      <li><svg class="ic" aria-hidden="true"><use href="#i-bubble"/></svg>Messenger</li>
+      <li><svg class="ic" aria-hidden="true"><use href="#i-phone"/></svg>Телефон</li>
+    </ul>
+    <p class="bigstat rv" style="--d:2"><span class="bigstat__n"><span data-count="findViaRecs">60</span>%</span><span class="bigstat__t">от хората, които ползват агента, намират продукт през препоръките му.</span></p>
+  </div>
+</section>
+
+<!-- 4. ДОПЪЛНЕНИЕТО -->
+<section class="sec" id="marzh">
+  <div class="wrap split split--rev">
+    <div class="split__text">
+      <p class="eyebrow rv">Където е маржът</p>
+      <h2 class="h2 rv" style="--d:1">Телевизорът носи <span data-n="marginTv">5</span>% марж. Кабелът към него носи <span data-n="marginCable">400</span>%.</h2>
+      <div class="prose rv" style="--d:2">
+        <p>В истинския магазин продавачът не пуска клиента само с телевизора. Пита го на какво ще гледа и му показва кабела и стойката. Онлайн има каре „свързани продукти“, на което рядко някой натиска. Магазинът взема малкия марж и изпуска големия.</p>
+        <p>Агентът предлага допълнението в разговора, когато то има смисъл за клиента. Купувачът, който пазарува с агента, харчи с над <span data-n="basketUplift">30</span>% повече от този, който разглежда сам.</p>
+      </div>
+    </div>
+    <div class="stack-viz">
+      <figure class="panel margin rv" style="--d:1" id="margin" aria-label="Марж на телевизора и на кабела">
+        <figcaption class="panel__title">Марж</figcaption>
+        <div class="mrow">
+          <span class="mrow__ic"><svg class="ic" aria-hidden="true"><use href="#i-tv"/></svg></span>
+          <span class="mrow__lbl">Телевизор</span>
+          <span class="mrow__val"><span data-n="marginTv">5</span>%</span>
+          <span class="mrow__track"><span class="mrow__fill" data-w="marginTv"></span></span>
+        </div>
+        <div class="mrow">
+          <span class="mrow__ic"><svg class="ic" aria-hidden="true"><use href="#i-cable"/></svg></span>
+          <span class="mrow__lbl">Кабел</span>
+          <span class="mrow__val"><span data-n="marginCable">400</span>%</span>
+          <span class="mrow__track"><span class="mrow__fill mrow__fill--hot" data-w="marginCable"></span></span>
+        </div>
+        <p class="bigstat bigstat--sm"><span class="bigstat__n">над&nbsp;<span data-count="basketUplift">30</span>%</span><span class="bigstat__t"><span class="nw">по-голяма</span> сума на купувач през агента</span></p>
+      </figure>
+    </div>
+  </div>
+  <div class="wrap">
+    <figure class="panel story rv" id="story">
+      <div class="story__viz" aria-hidden="true">
+        <div class="story__row">
+          <span class="story__box"><span class="story__disc story__disc--a"></span></span>
+          <span class="story__line"><span class="story__run"></span><span class="story__mid"><span data-n="storyMin">45</span>&nbsp;минути разговор</span></span>
+          <span class="story__box"><span class="story__disc story__disc--b"></span></span>
+        </div>
+        <div class="story__labels">
+          <span><b class="story__val"><span data-n="storyFrom">15</span>&nbsp;евро</b><span class="story__lbl">в началото: продукт</span></span>
+          <span class="story__r"><b class="story__val"><span data-count="storyTo" data-from="15">240</span>&nbsp;евро</b><span class="story__lbl">след <span data-n="storyMin">45</span>&nbsp;минути: количка</span></span>
+        </div>
+      </div>
+      <figcaption class="story__copy">
+        <span class="panel__title">Един разговор</span>
+        <span class="story__txt">Клиент влезе за продукт за <span data-n="storyFrom">15</span>&nbsp;евро. Говори с агента <span data-n="storyMin">45</span>&nbsp;минути и излезе с количка за <span data-n="storyTo">240</span>&nbsp;евро. Агентът имаше време за всеки негов въпрос и му помогна да вземе всичко, което наистина му трябваше.</span>
+      </figcaption>
+    </figure>
+  </div>
+</section>
+
+<!-- 5. ЧИСЛАТА -->
+<section class="sec sec--numbers" id="chisla">
+  <div class="wrap">
+    <div class="head head--center">
+      <p class="eyebrow rv">Резултати</p>
+      <h2 class="h2 h2--xl rv" style="--d:1">Всяко съобщение носи €<span data-n="perMsgClaim">1</span>. И&nbsp;това е само началото.</h2>
+      <p class="lead rv" style="--d:2">Сметката е проста: продажбите през агента, разделени на съобщенията на клиентите. Ето я за три магазина от различни сектори.</p>
+    </div>
+    <div class="cases">
+      <article class="case rv" style="--d:1">
+        <p class="case__who">Магазин за техника <span class="case__per"><span data-n="tech.months">4</span> месеца</span></p>
+        <p class="case__big"><span data-count="tech.perMsg">1,96</span><small>евро на съобщение</small></p>
+        <dl class="case__rows">
+          <div><dt>Продажби през агента</dt><dd><span data-count="tech.sales">42&nbsp;115</span>&nbsp;евро</dd></div>
+          <div><dt>Съобщения</dt><dd><span data-count="tech.msgs">21&nbsp;520</span></dd></div>
+        </dl>
+      </article>
+      <article class="case rv" style="--d:2">
+        <p class="case__who">Козметичен бранд <span class="case__per"><span data-n="beauty.months">1</span> месец</span></p>
+        <p class="case__big"><span data-count="beauty.perMsg">2,11</span><small>евро на съобщение</small></p>
+        <dl class="case__rows">
+          <div><dt>Продажби през агента</dt><dd><span data-count="beauty.sales">5&nbsp;881</span>&nbsp;евро</dd></div>
+          <div><dt>Съобщения</dt><dd><span data-count="beauty.msgs">2&nbsp;783</span></dd></div>
+        </dl>
+      </article>
+      <article class="case rv" style="--d:3">
+        <p class="case__who">Спортен магазин <span class="case__per"><span data-n="sport.months">6</span> месеца</span></p>
+        <p class="case__big"><span data-count="sport.perMsg">0,70</span><small>евро на съобщение</small></p>
+        <dl class="case__rows">
+          <div><dt>Продажби през агента</dt><dd><span data-count="sport.sales">80&nbsp;253</span>&nbsp;евро</dd></div>
+          <div><dt>Съобщения</dt><dd><span data-count="sport.msgs">114&nbsp;161</span></dd></div>
+        </dl>
+      </article>
+    </div>
+    <p class="together rv">Заедно трите магазина: <b><span data-n="all.sales">128&nbsp;249</span>&nbsp;евро</b> от <b><span data-n="all.msgs">138&nbsp;464</span> съобщения</b>.</p>
+
+    <figure class="panel funnel rv" id="funnel">
+      <figcaption class="funnel__head">
+        <span class="panel__title">От препоръка до покупка</span>
+        <span class="funnel__sub">Магазинът за техника: продуктите, които агентът е показал в разговорите</span>
+      </figcaption>
+      <div class="funnel__body">
+        <div class="funnel__shape" aria-hidden="true"></div>
+        <div class="frow" data-key="funnel.shown"><span class="frow__n"><span data-count="funnel.shown">44&nbsp;726</span></span><span class="frow__l">показани продукта</span><span class="frow__bar"><i></i></span></div>
+        <div class="frow" data-key="funnel.click"><span class="frow__n"><span data-count="funnel.click">5&nbsp;447</span></span><span class="frow__l">кликнати</span><span class="frow__bar"><i></i></span></div>
+        <div class="frow" data-key="funnel.cart"><span class="frow__n"><span data-count="funnel.cart">1&nbsp;392</span></span><span class="frow__l">добавени в количката</span><span class="frow__bar"><i></i></span></div>
+        <div class="frow" data-key="funnel.bought"><span class="frow__n"><span data-count="funnel.bought">438</span></span><span class="frow__l">купени</span><span class="frow__bar"><i></i></span></div>
+      </div>
+    </figure>
+
+    <div class="duo">
+      <p class="bigstat rv"><span class="bigstat__n">над&nbsp;<span data-count="engage">30</span>%</span><span class="bigstat__t">от посетителите за месеца влизат в разговор с агента</span></p>
+      <p class="bigstat rv" style="--d:1"><span class="bigstat__n"><span data-count="orderInChat">10</span>%</span><span class="bigstat__t">от хората, които го ползват, поръчват направо в разговора</span></p>
+    </div>
+    <p class="where rv">Агентът работи при <b><span data-n="clients">20</span>+ клиента</b> в <span id="countries">България, Румъния, Гърция, Хърватия и Сърбия</span>.</p>
+  </div>
+</section>
+
+<!-- 6. ОТЧЕТЪТ -->
+<section class="sec" id="otchet">
+  <div class="wrap split">
+    <div class="split__text">
+      <p class="eyebrow rv">След разговора</p>
+      <h2 class="h2 h2--quote rv" style="--d:1">„<span data-n="missingAsked">51</span> купувачи са питали за този продукт този месец. Добавете го в асортимента.“</h2>
+      <div class="prose rv" style="--d:2">
+        <p>Това е ред от отчета, който магазинът получава. Клиентът от петък в 23:30 търсеше продукт, който го нямаше. Агентът запази поръчката му, а после показа на магазина колко други хора са питали за същото.</p>
+        <p>От разговорите научавате неща, които иначе не бихте разбрали:</p>
+        <ul class="ticks">
+          <li><svg class="ic" aria-hidden="true"><use href="#i-check"/></svg>какво търсят и не намират</li>
+          <li><svg class="ic" aria-hidden="true"><use href="#i-check"/></svg>кое търсене расте по сезон</li>
+          <li><svg class="ic" aria-hidden="true"><use href="#i-check"/></svg>къде сайтът ги спъва</li>
+        </ul>
+      </div>
+    </div>
+    <div class="admin-wrap">
+      <figure class="admin rv" style="--d:1" aria-label="Панел с отчета на магазина">
+        <div class="admin__top">
+          <img src="assets/img/mark.png" alt="" width="160" height="149">
+          <span class="admin__title">Отчет за месеца</span>
+        </div>
+        <div class="admin__tabs" aria-hidden="true">
+          <span class="is-on">Търсят и не намират</span><span>Расте по сезон</span><span>Спъва ги в сайта</span>
+        </div>
+        <div class="insight">
+          <span class="insight__img" id="insightImg" aria-hidden="true"></span>
+          <span class="insight__n"><span data-count="missingAsked">51</span></span>
+          <span class="insight__t">купувачи са питали за този продукт този месец. <b>Добавете го в асортимента.</b></span>
+        </div>
+        <div class="skel" aria-hidden="true"><i></i><i></i><i></i></div>
+        <div class="skel skel--b" aria-hidden="true"><i></i><i></i><i></i></div>
+      </figure>
+      <p class="bigstat rv" style="--d:2"><span class="bigstat__n"><span data-count="noHuman">95</span>%</span><span class="bigstat__t">от разговорите минават без човек. Екипът ви остава и има време за работата, която иска човек.</span></p>
+    </div>
+  </div>
+</section>
+
+<!-- 7. КАКВО ПОЛУЧАВАТЕ -->
+<section class="sec" id="poluchavate">
+  <div class="wrap">
+    <div class="head head--center">
+      <p class="eyebrow rv">Какво получавате</p>
+      <h2 class="h2 rv" style="--d:1">Какво получава магазинът ви</h2>
+      <p class="lead rv" style="--d:2">Агентът работи с трафика, който вече плащате. Ето какво включва работата с нас и колко от нея остава за вас.</p>
+    </div>
+    <div class="offer">
+      <p class="offer__group rv"><span class="offer__gi"><svg class="ic" aria-hidden="true"><use href="#i-trend"/></svg></span>Какво носи</p>
+      <div class="orow rv" style="--d:1"><span class="orow__ic"><svg class="ic" aria-hidden="true"><use href="#i-browser"/></svg></span><span><b>Продава в сайта, в Instagram и в Messenger.</b> Агентът консултира и предлага допълнения там, където клиентът пише, включително след реклама.</span></div>
+      <div class="orow rv" style="--d:2"><span class="orow__ic"><svg class="ic" aria-hidden="true"><use href="#i-phone"/></svg></span><span><b>Говори и по телефона.</b> Клиентите, които предпочитат да се обадят, говорят с гласовия агент.</span></div>
+      <div class="orow rv" style="--d:3"><span class="orow__ic"><svg class="ic" aria-hidden="true"><use href="#i-report"/></svg></span><span><b>Отчет от всеки разговор.</b> Виждате какво търсят клиентите и не намират, и къде сайтът ги спъва.</span></div>
+      <div class="orow rv" style="--d:4"><span class="orow__ic"><svg class="ic" aria-hidden="true"><use href="#i-memory"/></svg></span><span><b>Помни клиента.</b> Агентът знае предишните покупки, а при пропусната обичайна поръчка праща персонален код.</span></div>
+      <p class="offer__group offer__group--you rv"><span class="offer__gi"><svg class="ic" aria-hidden="true"><use href="#i-tool"/></svg></span>Какво остава за вас</p>
+      <div class="orow orow--you rv" style="--d:1"><span class="orow__ic"><svg class="ic" aria-hidden="true"><use href="#i-tool"/></svg></span><span><b>Строим и обучаваме го ние.</b> Обучаваме агента върху каталога, правилата и гласа на магазина ви, а от ваша страна остава връзката: плъгин или един API endpoint.</span></div>
+      <div class="orow orow--you rv" style="--d:2"><span class="orow__ic"><svg class="ic" aria-hidden="true"><use href="#i-unlock"/></svg></span><span><b>Без обвързване.</b> Ако агентът не продава при вас, можете да спрете.</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- 8. СРАВНЕНИЕТО -->
+<section class="sec" id="sravnenie">
+  <div class="wrap">
+    <div class="head">
+      <p class="eyebrow rv">Преди да решите</p>
+      <h2 class="h2 rv" style="--d:1">Чат, който идва с платформата, и агент, който продава</h2>
+      <p class="lead rv" style="--d:2">Платформите за онлайн магазини започнаха да добавят AI чат. Ако се чудите дали ви стига, сравнете какво прави всеки от двата.</p>
+    </div>
+    <div class="cmp rv" style="--d:1" role="table" aria-label="Сравнение">
+      <div class="cmp__row cmp__row--head" role="row">
+        <span role="columnheader" class="cmp__k"><span class="sr">Въпрос</span></span>
+        <span role="columnheader" class="cmp__them">Чат, който идва с платформата</span>
+        <span role="columnheader" class="cmp__us">Агент, който продава</span>
+      </div>
+      <div class="cmp__row" role="row">
+        <span role="rowheader" class="cmp__k">Къде работи</span>
+        <span role="cell" class="cmp__them" data-h="Чат, който идва с платформата">В магазини на същата платформа</span>
+        <span role="cell" class="cmp__us" data-h="Агент, който продава">Там, където е магазинът ви, без да го местите: плъгин за WooCommerce, Shopify и Magento или един API endpoint за собствена платформа</span>
+      </div>
+      <div class="cmp__row" role="row">
+        <span role="rowheader" class="cmp__k">Къде отговаря</span>
+        <span role="cell" class="cmp__them" data-h="Чат, който идва с платформата">Попитайте: отговаря ли и извън сайта?</span>
+        <span role="cell" class="cmp__us" data-h="Агент, който продава">В сайта, в Instagram и в Messenger</span>
+      </div>
+      <div class="cmp__row" role="row">
+        <span role="rowheader" class="cmp__k">По телефона</span>
+        <span role="cell" class="cmp__them" data-h="Чат, който идва с платформата">Попитайте: има ли глас, или е само писмено?</span>
+        <span role="cell" class="cmp__us" data-h="Агент, който продава">Гласов агент, който говори с клиентите</span>
+      </div>
+      <div class="cmp__row" role="row">
+        <span role="rowheader" class="cmp__k">Кой го настройва</span>
+        <span role="cell" class="cmp__them" data-h="Чат, който идва с платформата">Вие, в админа</span>
+        <span role="cell" class="cmp__us" data-h="Агент, който продава">Ние: строим и обучаваме агента върху каталога, правилата и гласа на магазина ви</span>
+      </div>
+      <div class="cmp__row" role="row">
+        <span role="rowheader" class="cmp__k">Доказателство</span>
+        <span role="cell" class="cmp__them" data-h="Чат, който идва с платформата">Попитайте: числата от истински магазин ли са, или са примерни?</span>
+        <span role="cell" class="cmp__us" data-h="Агент, който продава">Продажби от работещи магазини:<span data-n="tech.perMsg">1,96</span>&nbsp;евро на съобщение в магазин за техника</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 9. КАК ЗАПОЧВАМЕ -->
+<section class="sec" id="start">
+  <div class="wrap">
+    <div class="head">
+      <p class="eyebrow rv">Как започваме</p>
+      <h2 class="h2 rv" style="--d:1">Вашата част? Един API endpoint. Нашата? Всичко останало.</h2>
+      <p class="lead rv" style="--d:2">Работим там, където е магазинът ви, без да го местим. За WooCommerce, Shopify и Magento има плъгин. За магазин на собствена платформа ни трябва един API endpoint. Останалото го правим ние.</p>
+    </div>
+    <ol class="steps">
+      <li class="step rv" style="--d:1"><span class="step__n">1</span><h3>Разговор</h3><p>Разказвате ни как продава магазинът ви и какви са правилата ви.</p><span class="step__who">Вие и ние</span></li>
+      <li class="step step--you rv" style="--d:2"><span class="step__n">2</span><h3>Връзка</h3><p>Плъгин или един API endpoint.</p><span class="step__who">Вашата част</span></li>
+      <li class="step rv" style="--d:3"><span class="step__n">3</span><h3>Обучение</h3><p>Строим и обучаваме агента върху каталога, правилата и гласа на магазина ви. Вие не настройвате нищо.</p><span class="step__who">Ние</span></li>
+      <li class="step rv" style="--d:4"><span class="step__n">4</span><h3>Агентът започва работа</h3><p>В сайта, в Instagram и в Messenger.</p><span class="step__who">Агентът</span></li>
+    </ol>
+    <div class="center rv"><a class="btn btn--lg js-contact" href="mailto:razgovor@example.com">Хайде да поговорим</a></div>
+  </div>
+</section>
+
+<!-- 10. ЦЕНА -->
+<section class="sec" id="cena">
+  <div class="wrap">
+    <div class="price panel rv">
+      <div class="price__text">
+        <p class="eyebrow">Цена</p>
+        <h2 class="h2">В магазин за техника агентът връща месечната си такса за <span class="nw">по-малко</span> от <span data-n="tech.payback">3</span>&nbsp;дни</h2>
+        <p class="lead">Там агентът продава за около <span data-n="tech.perDay">350</span>&nbsp;евро на ден: <span data-n="tech.sales">42&nbsp;115</span>&nbsp;евро за <span data-n="tech.months">4</span>&nbsp;месеца. Пишете ни и ще ви кажем цената за вашия магазин.</p>
+        <a class="btn btn--lg js-contact" href="mailto:razgovor@example.com">Пишете ни сега</a>
+      </div>
+      <figure class="month" id="month" aria-label="Един месец: таксата се връща в първите три дни">
+        <figcaption class="month__cap"><span>Един месец</span><span class="month__key"><i></i>под <span data-n="tech.payback">3</span>&nbsp;дни</span></figcaption>
+        <div class="month__grid" id="monthGrid"></div>
+      </figure>
+    </div>
+  </div>
+</section>
+
+<!-- 11. КАКВО НЕ ОБЕЩАВАМЕ -->
+<section class="sec" id="chestno">
+  <div class="wrap">
+    <div class="head">
+      <p class="eyebrow rv">Честно</p>
+      <h2 class="h2 rv" style="--d:1">Какво не обещаваме</h2>
+      <p class="lead rv" style="--d:2">Числата на тази страница са от други магазини. При вас ще са вашите, и предварително няма да ви кажем колко ще продадете.</p>
+    </div>
+    <div class="honest">
+      <article class="hon rv" style="--d:1"><svg class="ic" aria-hidden="true"><use href="#i-trend"/></svg><h3>Конкретен резултат</h3><p>Той зависи от трафика и от каталога ви, и го виждаме едва когато агентът работи.</p></article>
+      <article class="hon rv" style="--d:2"><svg class="ic" aria-hidden="true"><use href="#i-alert"/></svg><h3>Безгрешен AI</h3><p>Такъв няма. Затова още в първия разговор изясняваме ограниченията на агента при вас и какво става при неточен отговор.</p></article>
+      <article class="hon rv" style="--d:3"><svg class="ic" aria-hidden="true"><use href="#i-card"/></svg><h3>Плащане в разговора</h3><p>Клиентът завършва поръчката си в разговора, а плащането минава през магазина, по пътя, който вече ползвате.</p></article>
+      <article class="hon rv" style="--d:4"><svg class="ic" aria-hidden="true"><use href="#i-users"/></svg><h3>Хора, които стават излишни</h3><p>Агентът е тук, за да продава. Екипът ви остава.</p></article>
+    </div>
+  </div>
+</section>
+
+<!-- 12. ВЪПРОСИ -->
+<section class="sec" id="vaprosi">
+  <div class="wrap split split--top">
+    <div class="split__text">
+      <p class="eyebrow rv">Въпроси</p>
+      <h2 class="h2 rv" style="--d:1">Каквото ни питат <span class="nw">най-често</span></h2>
+      <div class="faq__aside rv" style="--d:2">
+        <p>Ако въпросът ви не е тук, пишете ни.</p>
+        <a class="btn btn--glass js-contact" href="mailto:razgovor@example.com">Пишете ни сега</a>
+      </div>
+    </div>
+    <div class="faq rv" style="--d:1" id="faq">
+      <div class="qa"><h3><button type="button" aria-expanded="false">Работи ли с моята платформа?<span class="qa__pm" aria-hidden="true"><svg class="ic"><use href="#i-plus"/></svg></span></button></h3><div class="qa__a"><div><p>За WooCommerce, Shopify и Magento имаме плъгин. Ако магазинът ви е на собствена платформа, ни трябва един API endpoint.</p></div></div></div>
+      <div class="qa"><h3><button type="button" aria-expanded="false">Трябва ли да местя магазина?<span class="qa__pm" aria-hidden="true"><svg class="ic"><use href="#i-plus"/></svg></span></button></h3><div class="qa__a"><div><p>Не. Работим там, където е магазинът ви.</p></div></div></div>
+      <div class="qa"><h3><button type="button" aria-expanded="false">Кой настройва агента?<span class="qa__pm" aria-hidden="true"><svg class="ic"><use href="#i-plus"/></svg></span></button></h3><div class="qa__a"><div><p>Ние. Строим и обучаваме агента върху каталога, правилата и гласа на магазина ви. От ваша страна е връзката: плъгин или един API endpoint.</p></div></div></div>
+      <div class="qa"><h3><button type="button" aria-expanded="false">На какви езици говори и кога?<span class="qa__pm" aria-hidden="true"><svg class="ic"><use href="#i-plus"/></svg></span></button></h3><div class="qa__a"><div><p>На всички езици, 24/7. Клиент, който пише в 23:30, получава отговор веднага.</p></div></div></div>
+      <div class="qa"><h3><button type="button" aria-expanded="false">Къде отговаря освен в сайта?<span class="qa__pm" aria-hidden="true"><svg class="ic"><use href="#i-plus"/></svg></span></button></h3><div class="qa__a"><div><p>В Instagram и в Messenger. Има и гласов агент, който говори с клиентите по телефона.</p></div></div></div>
+      <div class="qa"><h3><button type="button" aria-expanded="false">Може ли клиентът да плати в разговора?<span class="qa__pm" aria-hidden="true"><svg class="ic"><use href="#i-plus"/></svg></span></button></h3><div class="qa__a"><div><p>Поръчката се завършва в разговора. Плащането минава през страницата за плащане на магазина ви, както при всяка друга поръчка.</p></div></div></div>
+      <div class="qa"><h3><button type="button" aria-expanded="false">Какво прави агентът, ако продуктът го няма?<span class="qa__pm" aria-hidden="true"><svg class="ic"><use href="#i-plus"/></svg></span></button></h3><div class="qa__a"><div><p>Показва подобни и казва кой е <span class="nw">по-високо</span> оценен и кой пасва на предпочитанията на клиента. В отчета виждате колко хора са питали за липсващия продукт.</p></div></div></div>
+      <div class="qa"><h3><button type="button" aria-expanded="false">Това поредният чатбот ли е?<span class="qa__pm" aria-hidden="true"><svg class="ic"><use href="#i-plus"/></svg></span></button></h3><div class="qa__a"><div><p>Мерим го по продажбите, които носи: в магазина за техника това са средно <span data-n="tech.perMsg">1,96</span>&nbsp;евро на съобщение за <span data-n="tech.months">4</span>&nbsp;месеца.</p></div></div></div>
+      <div class="qa"><h3><button type="button" aria-expanded="false">Ще замени ли хората в екипа ми?<span class="qa__pm" aria-hidden="true"><svg class="ic"><use href="#i-plus"/></svg></span></button></h3><div class="qa__a"><div><p>Не. Поема повтарящите се въпроси: <span data-n="noHuman">95</span>% от разговорите минават без човек. Хората ви остават за случаите, в които трябва човек.</p></div></div></div>
+      <div class="qa"><h3><button type="button" aria-expanded="false">На кой AI модел работи?<span class="qa__pm" aria-hidden="true"><svg class="ic"><use href="#i-plus"/></svg></span></button></h3><div class="qa__a"><div><p>Не сме вързани за един доставчик на AI модели.</p></div></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- 13. ПОСЛЕДЕН ПРИЗИВ -->
+<section class="final" id="kontakt">
+  <div class="wrap final__in">
+    <p class="eyebrow rv">Следващата стъпка</p>
+    <h2 class="h2 h2--xl rv" style="--d:1">Довечера в 23:30 някой пак ще има въпрос</h2>
+    <p class="lead rv" style="--d:2">Разкажете ни за магазина си. Ще ви кажем честно какво може агентът при вас и какво трябва от ваша страна.</p>
+    <div class="final__cta rv" style="--d:3" id="finalCta">
+      <a class="btn btn--lg js-contact" href="mailto:razgovor@example.com">Хайде да поговорим</a>
+      <a class="btn btn--lg btn--glass js-contact" href="mailto:razgovor@example.com">Пишете ни сега</a>
+    </div>
+    <p class="final__note rv" style="--d:4">Работи 24/7, на всички езици, в сайта, в Instagram и в Messenger.</p>
+  </div>
+</section>
+
+</main>
+
+<footer class="foot">
+  <div class="wrap foot__in">
+    <img src="assets/img/logo-highsky.png" alt="HighSky Ai" width="640" height="235">
+    <p>AI продаващ агент за големи онлайн магазини</p>
+  </div>
+</footer>
+
+<div class="dock" id="dock" aria-hidden="true">
+  <a class="btn btn--lg js-contact" href="mailto:razgovor@example.com" tabindex="-1">Хайде да поговорим</a>
+</div>
+
+<script src="assets/js/data.js"></script>
+<script src="assets/js/main.js"></script>
+<script src="assets/js/chat.js"></script>
+</body>
+</html>
